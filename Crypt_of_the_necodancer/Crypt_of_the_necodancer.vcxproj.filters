@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\lib64">
+      <UniqueIdentifier>{92ae4dd2-c76e-4c77-9c2b-e51bf03bbb75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\lib64\cmake">
+      <UniqueIdentifier>{61ca9dbf-60fb-4deb-beee-ec46099dccbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\lib64\cmake\SFML">
+      <UniqueIdentifier>{1647136b-a932-43df-96b9-15f533a5d117}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include">
+      <UniqueIdentifier>{bf9b57a9-1414-48ae-9ba6-6889273c13c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML">
+      <UniqueIdentifier>{b5dba712-f0cb-4a4e-913d-292ab213040b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML\Audio">
+      <UniqueIdentifier>{8ee03145-5444-401b-a106-5b4f83d6cb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML\Graphics">
+      <UniqueIdentifier>{82460b3b-fb15-479b-a92b-c137e8feb7fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML\Network">
+      <UniqueIdentifier>{2ead7640-fb8b-4ef3-a5a4-f8eab0713335}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML\System">
+      <UniqueIdentifier>{acb00d9c-36dd-43ea-8a6d-3e1981bb72d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\include\SFML\Window">
+      <UniqueIdentifier>{a3a18e84-8e2c-4f67-906c-de4af640c862}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="openal32.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-audio-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-audio-d-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-graphics-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-graphics-d-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-network-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-network-d-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-system-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-system-d-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-window-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="sfml-window-d-2.dll">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLConfig.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLConfigDependencies.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLConfigVersion.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLSharedTargets.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLSharedTargets-debug.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLSharedTargets-release.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLStaticTargets.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLStaticTargets-debug.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\cmake\SFML\SFMLStaticTargets-release.cmake">
+      <Filter>Исходные файлы\lib64\cmake\SFML</Filter>
+    </None>
+    <None Include="lib64\sfml-audio-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-audio-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-graphics-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-graphics-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-main-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-network-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-network-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-system-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-system-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-window-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="lib64\sfml-window-s-d.pdb">
+      <Filter>Исходные файлы\lib64</Filter>
+    </None>
+    <None Include="include\SFML\Audio\SoundFileFactory.inl">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </None>
+    <None Include="include\SFML\Graphics\Glsl.inl">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </None>
+    <None Include="include\SFML\Graphics\Rect.inl">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </None>
+    <None Include="include\SFML\System\String.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+    <None Include="include\SFML\System\Thread.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+    <None Include="include\SFML\System\ThreadLocalPtr.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+    <None Include="include\SFML\System\Utf.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+    <None Include="include\SFML\System\Vector2.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+    <None Include="include\SFML\System\Vector3.inl">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib64\flac.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\freetype.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\ogg.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\openal32.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-audio.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-audio-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-audio-s.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-audio-s-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-graphics.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-graphics-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-graphics-s.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-graphics-s-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-main.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-main-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-network.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-network-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-network-s.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-network-s-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-system.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-system-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-system-s.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-system-s-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-window.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-window-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-window-s.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\sfml-window-s-d.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\vorbis.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\vorbisenc.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+    <Library Include="lib64\vorbisfile.lib">
+      <Filter>Исходные файлы\lib64</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\SFML\Audio.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Config.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\GpuPreference.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Main.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\OpenGL.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window.hpp">
+      <Filter>Исходные файлы\include\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\AlResource.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\Export.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\InputSoundFile.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\Listener.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\Music.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\OutputSoundFile.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\Sound.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundBuffer.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundBufferRecorder.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundFileFactory.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundFileReader.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundFileWriter.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundRecorder.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundSource.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Audio\SoundStream.hpp">
+      <Filter>Исходные файлы\include\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\BlendMode.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\CircleShape.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Color.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\ConvexShape.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Drawable.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Export.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Font.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Glsl.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Glyph.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Image.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\PrimitiveType.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Rect.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\RectangleShape.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\RenderStates.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\RenderTarget.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\RenderTexture.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\RenderWindow.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Shader.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Shape.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Sprite.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Text.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Texture.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Transform.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Transformable.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\Vertex.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\VertexArray.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\VertexBuffer.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Graphics\View.hpp">
+      <Filter>Исходные файлы\include\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\Export.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\Ftp.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\Http.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\IpAddress.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\Packet.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\Socket.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\SocketHandle.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\SocketSelector.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\TcpListener.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\TcpSocket.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Network\UdpSocket.hpp">
+      <Filter>Исходные файлы\include\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Clipboard.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Context.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\ContextSettings.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Cursor.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Event.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Export.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\GlResource.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Joystick.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Keyboard.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Mouse.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Sensor.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Touch.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\VideoMode.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\Window.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\WindowHandle.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\Window\WindowStyle.hpp">
+      <Filter>Исходные файлы\include\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Clock.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Err.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Export.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\FileInputStream.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\InputStream.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Lock.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\MemoryInputStream.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Mutex.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\NativeActivity.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\NonCopyable.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Sleep.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\String.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Thread.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\ThreadLocal.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\ThreadLocalPtr.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Time.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Utf.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Vector2.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SFML\System\Vector3.hpp">
+      <Filter>Исходные файлы\include\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Armor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
