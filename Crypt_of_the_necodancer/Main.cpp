@@ -1,11 +1,6 @@
 #include <SFML/Graphics.hpp>
-//#include <vector>
-//#include <fstream>
 #include <thread>
-//#include "Map.h"
-//#include "Player.h"
 #include "Game.h"
-//#include "Weapon.h"
 
 using namespace sf;
 using namespace std;
@@ -14,7 +9,7 @@ using namespace std;
 #define WIN_LENGTH game.board.length*CELL
 #define LIGHT_RAD 6
 bool started = false, changingLevelLock = false, changingLevelAnswer = false, gameOver = false;
-Game game("levels\\bonuslevel.txt");
+Game game("levels\\level1.txt");
 View mainView(FloatRect(0.f, 0.f, 10 * CELL, 10 * CELL));
 Event event;
 vector<vector<float>> light, lightTemp;
@@ -273,14 +268,10 @@ void render() {
                 break;
 
             }
-            if (game.board.e[i] == nullptr) continue;
             enemySprite.setPosition(game.board.e[i]->x * CELL + CELL / 2, game.board.e[i]->y * CELL+ CELL / 2);
             window.draw(enemySprite);
-            if (game.board.e[i] == nullptr) continue;
             if (game.board.e[i]->typeOf() != enemyTypes::chest) {
-                if (game.board.e[i] == nullptr) continue;
                 sprite.setTexture(hearts[min(game.board.e[i]->health - 1, 5)]);
-                if (game.board.e[i] == nullptr) continue;
                 sprite.setPosition(game.board.e[i]->x * CELL, game.board.e[i]->y * CELL - 40);
                 window.draw(sprite);
             }
@@ -601,7 +592,7 @@ void control() {
                     enemyUpd();
                 }
                 break;
-            case sf::Keyboard::Space :
+            /*case sf::Keyboard::Space :
                 if(!buttonPressed)
                     enemyUpd();
                 break;
@@ -611,6 +602,7 @@ void control() {
                     changeLevel();
                 }
                 break;
+            */
             }
             if (!buttonPressed) {
                 lightUpdate();

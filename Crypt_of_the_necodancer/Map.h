@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-
 #include <fstream>
 #include "Item.h"
 #include "Torch.h"
@@ -263,7 +262,6 @@ public:
 	virtual bool attack(int dir, Map* board, int x, int y) { return 0; };
 	virtual string getName() { return name; };
 	void dealDamage(int x, int y, Map* board) {
-		killing = false;
 		int index = board->m[x][y].enemy->eIndex;
 		killing = true;
 		while (!killingAnswer) Sleep(0.1);
@@ -271,7 +269,6 @@ public:
 			
 			board->e[index] = nullptr;
 			board->m[x][y].enemy = nullptr;
-
 		}
 		killing = false;
 		killingAnswer = false;
