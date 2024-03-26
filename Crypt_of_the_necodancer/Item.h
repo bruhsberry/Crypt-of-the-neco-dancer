@@ -1,6 +1,10 @@
 #pragma once
-enum itemTypes{armor, weapon};
-enum items { noWeapon, testSword, testArmor, ironSword };
+#include <string>
+enum itemTypes{armor, weapon, torch};
+enum items { noWeapon, noArmor, noTorch, ironSword, titaniumSword, goldSword, woodenTorch,
+steelTorch, magicTorch, ironBroadsword, titaniumBroadsword, goldBroadsword, ironSpear, 
+titaniumSpear, goldSpear, letherArmor, chainArmor, plateArmor
+};
 class Item
 {
 public:
@@ -8,10 +12,11 @@ public:
 	short x;
 	short y;
 	bool held;
+	short price;
+	std::string name;
 	//void pickUp() {};
 	virtual short type() { return 0; };
 	virtual short typeOf() { return 0; };
-	int aaaa;
 };
 
 

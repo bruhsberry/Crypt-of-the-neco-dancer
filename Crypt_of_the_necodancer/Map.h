@@ -1,15 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <string>
+
 #include <fstream>
 #include "Item.h"
+#include "Torch.h"
 #include "Armor.h"
+#include "Windows.h"
 #pragma once
 using namespace std;
 enum directions { right, left, up, down };
-enum tile {empty, wall, hardWall};
-enum enemyTypes { greenSlime, blueSlime, purpleSlime, redSlime, zombie, bat, skeleton };
+enum tile {empty, exitDoor, wall, hardWall};
+enum enemyTypes { greenSlime, blueSlime, purpleSlime, 
+	redSlime, zombie, bat, skeleton, chest };
 
 class Map;
 
@@ -17,6 +20,7 @@ class Enemy
 {
 public:
 	int health;
+	bool facingLeft;
 	int x;
 	int y;
 	short eIndex;
@@ -24,6 +28,24 @@ public:
 	virtual void die(Map* board);
 	virtual int typeOf() { return -1; }
 	virtual int takeDamage(int damage, Map* board) { return 0; };
+};
+
+class Chest :public Enemy {
+public:
+	Item* itCarry;
+	void die(Map* board) override;
+	int typeOf() override { return enemyTypes::chest; }
+	int update(Map* board, int plx, int ply) override { return 0; };
+	Chest(int x, int y, int index, int itemId);
+	int takeDamage(int damage, Map* board) override {
+		std::cout << "enemy took damage";
+		health -= damage;
+		if (health <= 0) {
+			die(board);
+			return 1;
+		}
+		else return 0;
+	}
 };
 
 class GreenSlime : public Enemy {
@@ -95,7 +117,7 @@ public:
 	}
 	PurpleSlime(int x, int y, int i) {
 		srand(time(NULL));
-		health = 2;
+		health = 3;
 		state = rand() % 4;
 		eIndex = i;
 		this->x = x;
@@ -120,7 +142,7 @@ public:
 	}
 	RedSlime(int x, int y, int i) {
 		srand(time(NULL));
-		health = 2;
+		health = 4;
 		state = rand() % 4;
 		eIndex = i;
 		this->x = x;
@@ -145,7 +167,7 @@ public:
 	}
 	Zombie(int x, int y, int i) {
 		srand(time(NULL));
-		health = 2;
+		health = 4;
 		state = rand() % 8;
 		eIndex = i;
 		this->x = x;
@@ -194,7 +216,8 @@ public:
 		else return 0;
 	}
 	Skeleton(int x, int y, int i) {
-		health = 2;
+		facingLeft = false;
+		health = 3;
 		eIndex = i;
 		state = 0;
 		this->x = x;
@@ -215,12 +238,16 @@ struct Cell {
 class Map
 {
 public:
+	int difficulty;
+	int playerStartX;
+	int playerStartY;
 	int height;
 	int length;	
 	vector <vector<Cell>> m;
 	vector <Enemy*> e;
 	vector <Item*> it;
 	Map() {}
+	string nextLevel;
 	Map(string File);
 	void saveFile() {
 		
@@ -232,22 +259,28 @@ class Weapon : public Item
 {
 public:
 	int damage;
-	string name;
+	bool killing, killingAnswer;
 	virtual bool attack(int dir, Map* board, int x, int y) { return 0; };
 	virtual string getName() { return name; };
 	void dealDamage(int x, int y, Map* board) {
+		killing = false;
 		int index = board->m[x][y].enemy->eIndex;
+		killing = true;
+		while (!killingAnswer) Sleep(0.1);
 		if (board->m[x][y].enemy->takeDamage(damage, board)) {
-			board->m[x][y].enemy = nullptr;
+			
 			board->e[index] = nullptr;
+			board->m[x][y].enemy = nullptr;
+
 		}
+		killing = false;
+		killingAnswer = false;
 	}
 	short type() override { return itemTypes::weapon; };
 };
 
-class Testweapon : public Weapon {
+class Sword :public Weapon {
 public:
-	short typeOf() override { return items::testSword; };
 	bool attack(int dir, Map* board, int x, int y) override {
 		std::cout << "attack initiated\n";
 		switch (dir)
@@ -284,72 +317,97 @@ public:
 			break;
 		}
 		return 0;
-	}
-	Testweapon() {
-		damage = 1;
-		name = "Test sword";
-	}
-	Testweapon(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 1;
-		iIndex = i;
-		held = false;
-		name = "Test sword";
 	}
 };
 
-class IronSword : public Weapon {
+class IronSword : public Sword {
 public:
 	short typeOf() override { return items::ironSword; };
-	bool attack(int dir, Map* board, int x, int y) override {
-		std::cout << "attack initiated\n";
-		switch (dir)
-		{
-		case directions::right:
-			if (board->m[x + 1][y].enemy != nullptr) {
-				dealDamage(x + 1, y, board);
-				return 1;
-			}
-			break;
-
-		case directions::left:
-			if (board->m[x - 1][y].enemy != nullptr) {
-				dealDamage(x - 1, y, board);
-				return 1;
-			}
-			break;
-
-		case directions::up:
-			if (board->m[x][y - 1].enemy != nullptr) {
-				dealDamage(x, y - 1, board);
-				return 1;
-			}
-			break;
-
-		case directions::down:
-			if (board->m[x][y + 1].enemy != nullptr) {
-				dealDamage(x, y + 1, board);
-				return 1;
-			}
-			break;
-
-		default:
-			break;
-		}
-		return 0;
-	}
 	IronSword() {
-		damage = 3;
+		damage = 1;
 		name = "Iron sword";
+		price = 0;
 	}
 	IronSword(int x, int y, int i) {
 		this->x = x;
 		this->y = y;
-		damage = 3;
+		damage = 1;
 		iIndex = i;
 		held = false;
 		name = "Iron sword";
+		price = 0;
+	}
+	IronSword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 1;
+		iIndex = i;
+		held = false;
+		name = "Iron sword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class TitaniumSword : public Sword {
+public:
+	short typeOf() override { return items::titaniumSword; };
+	
+	TitaniumSword() {
+		damage = 2;
+		name = "Titanium sword";
+		price = 0;
+	}
+	TitaniumSword(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium sword";
+		price = 0;
+	}
+	TitaniumSword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium sword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class GoldSword : public Sword {
+public:
+	short typeOf() override { return items::goldSword; };
+	GoldSword() {
+		damage = 1;
+		name = "Gold sword";
+		price = 0;
+	}
+	GoldSword(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold sword";
+		price = 0;
+	}
+	GoldSword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold sword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
 	}
 };
 
@@ -361,7 +419,6 @@ public:
 		{
 		case directions::right:
 			if (board->m[x + 1][y].enemy != nullptr) {
-
 				return 1;
 			}
 			break;
@@ -390,6 +447,7 @@ public:
 		return 0;
 	}
 	NoWeapon() {
+		held = true;
 		damage = 0;
 		name = "No weapon";
 	}
@@ -402,10 +460,315 @@ public:
 	}
 };
 
+class Broadsword :public Weapon {
+public:
+	bool attack(int dir, Map* board, int x, int y) override {
+		bool hit = false;
+		std::cout << "attack initiated\n";
+		switch (dir)
+		{
+		case directions::right:
+			if (board->m[x + 1][y].enemy != nullptr) {
+				dealDamage(x + 1, y, board);
+				hit = true;
+			}
+			if (y < board->height - 1 && board->m[x + 1][y + 1].enemy != nullptr) {
+				dealDamage(x + 1, y + 1, board);
+				hit = true;
+			}
+			if (y > 0 && board->m[x + 1][y - 1].enemy != nullptr) {
+				dealDamage(x + 1, y - 1, board);
+				hit = true;
+			}
+			break;
+		case directions::left:
+			if (board->m[x - 1][y].enemy != nullptr) {
+				dealDamage(x - 1, y, board);
+				hit = true;
+			}
+			if (y < board->height - 1 && board->m[x - 1][y + 1].enemy != nullptr) {
+				dealDamage(x - 1, y + 1, board);
+				hit = true;
+			}
+			if (y > 0 && board->m[x - 1][y - 1].enemy != nullptr) {
+				dealDamage(x - 1, y - 1, board);
+				hit = true;
+			}
+			break;
+		case directions::up:
+			if (board->m[x][y - 1].enemy != nullptr) {
+				dealDamage(x, y - 1, board);
+				hit = true;
+			}
+			if (x < board->length - 1 && board->m[x + 1][y - 1].enemy != nullptr) {
+				dealDamage(x + 1, y - 1, board);
+				hit = true;
+			}
+			if (x > 0 && board->m[x - 1][y - 1].enemy != nullptr) {
+				dealDamage(x - 1, y - 1, board);
+				hit = true;
+			}
+			break;
+		case directions::down:
+			if (board->m[x][y + 1].enemy != nullptr) {
+				dealDamage(x, y + 1, board);
+				hit = true;
+			}
+			if (x < board->length - 1 && board->m[x + 1][y + 1].enemy != nullptr) {
+				dealDamage(x + 1, y + 1, board);
+				hit = true;
+			}
+			if (x > 0 && board->m[x - 1][y + 1].enemy != nullptr) {
+				dealDamage(x - 1, y + 1, board);
+				hit = true;
+			}
+			break;
+		default:
+			break;
+		}
+		if (hit) return 1;
+		return 0;
+	}
+};
+
+class IronBroadsword : public Broadsword {
+public:
+	short typeOf() override { return items::ironBroadsword; };
+	IronBroadsword() {
+		damage = 1;
+		name = "Iron broadsword";
+		price = 0;
+	}
+	IronBroadsword(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 1;
+		iIndex = i;
+		held = false;
+		name = "Iron broadsword";
+		price = 0;
+	}
+	IronBroadsword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 1;
+		iIndex = i;
+		held = false;
+		name = "Iron broadsword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class TitaniumBroadsword : public Broadsword {
+public:
+	short typeOf() override { return items::titaniumBroadsword; };
+	TitaniumBroadsword() {
+		damage = 2;
+		name = "Titanium broadsword";
+		price = 0;
+	}
+	TitaniumBroadsword(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium broadsword";
+		price = 0;
+	}
+	TitaniumBroadsword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium broadsword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class GoldBroadsword : public Broadsword {
+public:
+	short typeOf() override { return items::goldBroadsword; };
+	GoldBroadsword() {
+		damage = 3;
+		name = "Gold broadsword";
+		price = 0;
+	}
+	GoldBroadsword(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold broadsword";
+		price = 0;
+	}
+	GoldBroadsword(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold broadsword";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class Spear : public Weapon {
+	bool attack(int dir, Map* board, int x, int y) override {
+		bool hit = false;
+		std::cout << "attack initiated\n";
+		switch (dir)
+		{
+		case directions::right:
+			if (board->m[x + 1][y].enemy != nullptr) {
+				dealDamage(x + 1, y, board);
+				hit = true;
+			}
+			if (x < board->length - 2 && board->m[x + 2][y].enemy != nullptr) {
+				dealDamage(x + 2, y, board);
+				hit = true;
+			}
+			break;
+		case directions::left:
+			if (board->m[x - 1][y].enemy != nullptr) {
+				dealDamage(x - 1, y, board);
+				hit = true;
+			}
+			if (x > 1 && board->m[x - 2][y].enemy != nullptr) {
+				dealDamage(x - 2, y, board);
+				hit = true;
+			}
+			break;
+		case directions::up:
+			if (board->m[x][y - 1].enemy != nullptr) {
+				dealDamage(x, y - 1, board);
+				hit = true;
+			}
+			if (y > 1 && board->m[x][y - 2, 0].enemy != nullptr) {
+				dealDamage(x,  y - 2, board);
+				hit = true;
+			}
+			break;
+		case directions::down:
+			if (board->m[x][y + 1].enemy != nullptr) {
+				dealDamage(x, y + 1, board);
+				hit = true;
+			}
+			if (y < board->height - 2 && board->m[x][y + 2].enemy != nullptr) {
+				dealDamage(x, y + 2, board);
+				hit = true;
+			}
+
+			break;
+		default:
+			break;
+		}
+		if (hit) return 1;
+		return 0;
+	}
+};
+
+class IronSpear :public Spear {
+public:
+	short typeOf() override { return items::ironSpear; };
+	IronSpear() {
+		damage = 1;
+		name = "Iron spear";
+		price = 0;
+	}
+	IronSpear(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 1;
+		iIndex = i;
+		held = false;
+		name = "Iron spear";
+		price = 0;
+	}
+	IronSpear(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 1;
+		iIndex = i;
+		held = false;
+		name = "Iron spear";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class TitaniumSpear :public Spear {
+public:
+	short typeOf() override { return items::titaniumSpear; };
+	TitaniumSpear() {
+		damage = 2;
+		name = "Titanium spear";
+		price = 0;
+	}
+	TitaniumSpear(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium spear";
+		price = 0;
+	}
+	TitaniumSpear(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 2;
+		iIndex = i;
+		held = false;
+		name = "Titanium spear";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
+
+class GoldSpear :public Spear {
+public:
+	short typeOf() override { return items::goldSpear; };
+	GoldSpear() {
+		damage = 3;
+		name = "Gold spear";
+		price = 0;
+	}
+	GoldSpear(int x, int y, int i) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold spear";
+		price = 0;
+	}
+	GoldSpear(int x, int y, int i, int p) {
+		this->x = x;
+		this->y = y;
+		damage = 3;
+		iIndex = i;
+		held = false;
+		name = "Gold spear";
+		price = p;
+		killing = false;
+		killingAnswer = false;
+	}
+};
 
 void Enemy::die(Map* board){
 	cout << "umer\n";
-	board->m[this->x][this->y].gold += 10;
+	board->m[this->x][this->y].gold += 1;
 	delete(this);
 }
 
@@ -414,10 +777,10 @@ int BlueSlime::update(Map* board, int plx, int ply){
 	switch (state)
 	{
 	case 1:
-		if (y > 0 && board->m[x][max(y - 1, 0)].tile != wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
+		if (y > 0 && board->m[x][max(y - 1, 0)].tile != tile::wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
 
 			if (plx == x && y - 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y - 1].enemy = this;
@@ -426,9 +789,9 @@ int BlueSlime::update(Map* board, int plx, int ply){
 		}
 		break;
 	case 3:
-		if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
+		if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != tile::wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
 			if (plx == x && y + 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y + 1].enemy = this;
@@ -451,7 +814,7 @@ int PurpleSlime::update(Map* board, int plx, int ply) {
 		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 
 			if (plx == x - 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x - 1][y].enemy = this;
@@ -462,7 +825,7 @@ int PurpleSlime::update(Map* board, int plx, int ply) {
 	case 3:
 		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 			if (plx == x + 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x + 1][y].enemy = this;
@@ -484,7 +847,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 		if (y > 0 && board->m[x][max(y - 1, 0)].tile != wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
 
 			if (plx == x && y - 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y - 1].enemy = this;
@@ -495,7 +858,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 	case 3:
 		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 			if (plx == x + 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x + 1][y].enemy = this;
@@ -506,7 +869,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 	case 5:
 		if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
 			if (plx == x && y + 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y + 1].enemy = this;
@@ -518,7 +881,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 
 			if (plx == x - 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x - 1][y].enemy = this;
@@ -540,7 +903,7 @@ int Zombie::update(Map* board, int plx, int ply) {
 	case 0:
 		if (y > 0 && board->m[x][max(y - 1, 0)].tile != wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
 			if (plx == x && y - 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y - 1].enemy = this;
@@ -554,8 +917,9 @@ int Zombie::update(Map* board, int plx, int ply) {
 		break;
 	case 2:
 		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+			facingLeft = false;
 			if (plx == x + 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x + 1][y].enemy = this;
@@ -570,7 +934,7 @@ int Zombie::update(Map* board, int plx, int ply) {
 	case 4:
 		if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
 			if (plx == x && y + 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y + 1].enemy = this;
@@ -584,9 +948,9 @@ int Zombie::update(Map* board, int plx, int ply) {
 		break;
 	case 6:
 		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
-
+			facingLeft = true;
 			if (plx == x - 1 && y == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x - 1][y].enemy = this;
@@ -611,7 +975,7 @@ int Bat::update(Map* board, int plx, int ply) {
 		case 0:
 			if (y > 0 && board->m[x][max(y - 1, 0)].tile != wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
 			if (plx == x && y - 1 == ply) {
-				return 1;
+				return board->difficulty;
 			}
 			board->m[x][y].enemy = nullptr;
 			board->m[x][y - 1].enemy = this;
@@ -621,8 +985,9 @@ int Bat::update(Map* board, int plx, int ply) {
 			break;
 		case 1:
 			if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+				facingLeft = false;
 				if (plx == x + 1 && y == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x + 1][y].enemy = this;
@@ -633,7 +998,7 @@ int Bat::update(Map* board, int plx, int ply) {
 		case 2:
 			if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
 				if (plx == x && y + 1 == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x][y + 1].enemy = this;
@@ -643,9 +1008,9 @@ int Bat::update(Map* board, int plx, int ply) {
 			break;
 		case 3:
 			if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
-
+				facingLeft = true;
 				if (plx == x - 1 && y == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x - 1][y].enemy = this;
@@ -679,7 +1044,7 @@ int Skeleton::update(Map* board, int plx, int ply) {
 			if (y > 0 && board->m[x][max(y - 1, 0)].tile != wall && board->m[x][max(y - 1, 0)].enemy == nullptr) {
 
 				if (plx == x && y - 1 == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x][y - 1].enemy = this;
@@ -698,8 +1063,9 @@ int Skeleton::update(Map* board, int plx, int ply) {
 	case 3://right
 		if (plx > x) {
 			if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+				facingLeft = false;
 				if (plx == x + 1 && y == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x + 1][y].enemy = this;
@@ -719,7 +1085,7 @@ int Skeleton::update(Map* board, int plx, int ply) {
 		if (ply > y) {
 			if (y < board->height - 1 && board->m[x][min(y + 1, board->height)].tile != wall && board->m[x][min(y + 1, board->height)].enemy == nullptr) {
 				if (plx == x && y + 1 == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x][y + 1].enemy = this;
@@ -738,8 +1104,9 @@ int Skeleton::update(Map* board, int plx, int ply) {
 	case 7://left
 		if (plx < x) {
 			if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
+				facingLeft = true;
 				if (plx == x - 1 && y == ply) {
-					return 1;
+					return board->difficulty;
 				}
 				board->m[x][y].enemy = nullptr;
 				board->m[x - 1][y].enemy = this;
@@ -761,13 +1128,77 @@ int Skeleton::update(Map* board, int plx, int ply) {
 	return 0;
 }
 
-
+void Chest::die(Map* board) {
+	itCarry->x = x;
+	itCarry->y = y;
+	itCarry->held = false;
+	itCarry->iIndex = board->it.size();
+	board->m[x][y].item = itCarry;
+	board->it.push_back(itCarry);
+}
+Chest::Chest(int x, int y, int index, int itemId) {
+	health = 1;
+	eIndex = index;
+	this->x = x;
+	this->y = y;
+	switch (itemId)
+	{
+	case items::ironSword:
+		itCarry = new IronSword();
+		break;
+	case items::titaniumSword:
+		itCarry = new TitaniumSword();
+		break;
+	case items::goldSword:
+		itCarry = new GoldSword();
+		break;
+	case items::woodenTorch:
+		itCarry = new WoodenTorch();
+		break;
+	case items::steelTorch:
+		itCarry = new SteelTorch();
+		break;
+	case items::magicTorch:
+		itCarry = new MagicTorch();
+		break;
+	case items::ironBroadsword:
+		itCarry = new IronBroadsword();
+		break;
+	case items::titaniumBroadsword:
+		itCarry = new TitaniumBroadsword();
+		break;
+	case items::goldBroadsword:
+		itCarry = new GoldBroadsword();
+		break;
+	case items::ironSpear:
+		itCarry = new IronSpear();
+		break;
+	case items::titaniumSpear:
+		itCarry = new TitaniumSpear();
+		break;
+	case items::goldSpear:
+		itCarry = new GoldSpear();
+		break;
+	case items::letherArmor:
+		itCarry = new LetherArmor();
+		break;
+	case items::chainArmor:
+		itCarry = new ChainArmor();
+		break;
+	case items::plateArmor:
+		itCarry = new PlateArmor();
+		break;
+	default:
+		break;
+	}
+}
 
 
 Map::Map(string File) {
-
+	difficulty = 0;
 	ifstream f(File);
 	if (!f.is_open()) cout << "file is not open";
+	f >> playerStartX >> playerStartY;
 	f >> length >> height;
 	m.resize(length);
 	for (int i = 0; i < length; i++)
@@ -780,13 +1211,9 @@ Map::Map(string File) {
 			f >> m[j][i].tile;
 		}
 	}
-
-
-	
-	int num;
+	int num, type, x, y, price;
 	f >> num;
 	e.resize(num);
-	int type, x, y;
 	for (int i = 0; i < num; i++)
 	{
 		f >> type >> x >> y;
@@ -813,6 +1240,11 @@ Map::Map(string File) {
 		case enemyTypes::skeleton:
 			m[x][y].enemy = new Skeleton(x, y, i);
 			break;
+		case enemyTypes::chest:
+			short item;
+			f >> item;
+			m[x][y].enemy = new Chest(x, y, i, item);
+			break;
 		default:
 			break;
 		}
@@ -821,21 +1253,58 @@ Map::Map(string File) {
 	f >> num;
 	it.resize(num);
 	for (int i = 0; i < num; i++) {
-		f >> type >> x >> y;
+		f >> type >> x >> y >> price;
 		switch (type)
 		{
-		case items::testSword: 
-			m[x][y].item = new Testweapon(x, y, i);
-			break;
-		case items::testArmor: 
-			m[x][y].item = new TestArmor(x, y, i);
-			break;
 		case items::ironSword: 
-			m[x][y].item = new IronSword(x, y, i);
-			break;		
+			m[x][y].item = new IronSword(x, y, i, price);
+			break;
+		case items::titaniumSword: 
+			m[x][y].item = new TitaniumSword(x, y, i, price);
+			break;	
+		case items::goldSword:
+			m[x][y].item = new GoldSword(x, y, i, price);
+			break;
+		case items::woodenTorch:
+			m[x][y].item = new WoodenTorch(x, y, i, price);
+			break;
+		case items::steelTorch:
+			m[x][y].item = new SteelTorch(x, y, i, price);
+			break;
+		case items::magicTorch:
+			m[x][y].item = new MagicTorch(x, y, i, price);
+			break;
+		case items::ironBroadsword:
+			m[x][y].item = new IronBroadsword(x, y, i, price);
+			break;
+		case items::titaniumBroadsword:
+			m[x][y].item = new TitaniumBroadsword(x, y, i, price);
+			break;
+		case items::goldBroadsword:
+			m[x][y].item = new GoldBroadsword(x, y, i, price);
+			break;
+		case items::ironSpear:
+			m[x][y].item = new IronSpear(x, y, i, price);
+			break;
+		case items::titaniumSpear:
+			m[x][y].item = new TitaniumSpear(x, y, i, price);
+			break;
+		case items::goldSpear:
+			m[x][y].item = new GoldSpear(x, y, i, price);
+			break;
+		case items::letherArmor:
+			m[x][y].item = new LetherArmor(x, y, i, price);
+			break;
+		case items::chainArmor:
+			m[x][y].item = new ChainArmor(x, y, i, price);
+			break;
+		case items::plateArmor:
+			m[x][y].item = new PlateArmor(x, y, i, price);
+			break;
 		default:
 			break;
 		}
 		it[i] = m[x][y].item;
 	}
+	f >> nextLevel;
 }
