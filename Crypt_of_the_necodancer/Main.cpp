@@ -603,7 +603,7 @@ void control() {
             //    }
             //    break;
             //
-            //}
+            }
             if (!buttonPressed) {
                 lightUpdate();
             }
