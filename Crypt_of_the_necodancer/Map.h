@@ -324,6 +324,8 @@ public:
 		damage = 1;
 		name = "Iron sword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	IronSword(int x, int y, int i) {
 		this->x = x;
@@ -355,6 +357,8 @@ public:
 		damage = 2;
 		name = "Titanium sword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	TitaniumSword(int x, int y, int i) {
 		this->x = x;
@@ -385,6 +389,8 @@ public:
 		damage = 1;
 		name = "Gold sword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	GoldSword(int x, int y, int i) {
 		this->x = x;
@@ -446,7 +452,9 @@ public:
 	NoWeapon() {
 		held = true;
 		damage = 0;
-		name = "No weapon";
+		name = "No weapon";		
+		killing = false;
+		killingAnswer = false;
 	}
 	NoWeapon(int x, int y, int i) {
 		this->x = x;
@@ -454,6 +462,8 @@ public:
 		damage = 0;
 		iIndex = i;
 		name = "Test sword";
+		killing = false;
+		killingAnswer = false;
 	}
 };
 
@@ -535,6 +545,8 @@ public:
 		damage = 1;
 		name = "Iron broadsword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	IronBroadsword(int x, int y, int i) {
 		this->x = x;
@@ -565,6 +577,8 @@ public:
 		damage = 2;
 		name = "Titanium broadsword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	TitaniumBroadsword(int x, int y, int i) {
 		this->x = x;
@@ -595,6 +609,8 @@ public:
 		damage = 3;
 		name = "Gold broadsword";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	GoldBroadsword(int x, int y, int i) {
 		this->x = x;
@@ -680,6 +696,8 @@ public:
 		damage = 1;
 		name = "Iron spear";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	IronSpear(int x, int y, int i) {
 		this->x = x;
@@ -710,6 +728,8 @@ public:
 		damage = 2;
 		name = "Titanium spear";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	TitaniumSpear(int x, int y, int i) {
 		this->x = x;
@@ -740,6 +760,8 @@ public:
 		damage = 3;
 		name = "Gold spear";
 		price = 0;
+		killing = false;
+		killingAnswer = false;
 	}
 	GoldSpear(int x, int y, int i) {
 		this->x = x;
@@ -808,7 +830,7 @@ int PurpleSlime::update(Map* board, int plx, int ply) {
 	switch (state)
 	{
 	case 1:
-		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
+		if (x > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 
 			if (plx == x - 1 && y == ply) {
 				return board->difficulty;
@@ -820,7 +842,7 @@ int PurpleSlime::update(Map* board, int plx, int ply) {
 		}
 		break;
 	case 3:
-		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+		if (x < board->length - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 			if (plx == x + 1 && y == ply) {
 				return board->difficulty;
 			}
@@ -853,7 +875,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 		}
 		break;
 	case 3:
-		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+		if (x < board->length - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 			if (plx == x + 1 && y == ply) {
 				return board->difficulty;
 			}
@@ -875,7 +897,7 @@ int RedSlime::update(Map* board, int plx, int ply) {
 		}
 		break;
 	case 7:
-		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
+		if (x > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 
 			if (plx == x - 1 && y == ply) {
 				return board->difficulty;
@@ -913,7 +935,7 @@ int Zombie::update(Map* board, int plx, int ply) {
 		state--;
 		break;
 	case 2:
-		if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+		if (x < board->length - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 			facingLeft = false;
 			if (plx == x + 1 && y == ply) {
 				return board->difficulty;
@@ -944,7 +966,7 @@ int Zombie::update(Map* board, int plx, int ply) {
 		state--;
 		break;
 	case 6:
-		if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
+		if (x > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 			facingLeft = true;
 			if (plx == x - 1 && y == ply) {
 				return board->difficulty;
@@ -981,7 +1003,7 @@ int Bat::update(Map* board, int plx, int ply) {
 			state++;
 			break;
 		case 1:
-			if (y < board->height - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
+			if (x < board->length - 1 && board->m[min(x + 1, board->height)][y].tile != wall && board->m[min(x + 1, board->height)][y].enemy == nullptr) {
 				facingLeft = false;
 				if (plx == x + 1 && y == ply) {
 					return board->difficulty;
@@ -1004,7 +1026,7 @@ int Bat::update(Map* board, int plx, int ply) {
 			state++;
 			break;
 		case 3:
-			if (y > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
+			if (x > 0 && board->m[max(x - 1, 0)][y].tile != wall && board->m[max(x - 1, 0)][y].enemy == nullptr) {
 				facingLeft = true;
 				if (plx == x - 1 && y == ply) {
 					return board->difficulty;
