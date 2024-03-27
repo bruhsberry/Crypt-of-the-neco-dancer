@@ -29,6 +29,7 @@ public:
 		player.y = board.playerStartY;
 		player.health = player.maxhealth;
 		nextLevel = board.nextLevel;
+
 		player.weapon->iIndex = board.it.size();
 		board.it.push_back(player.weapon);
 		player.armor->iIndex = board.it.size();

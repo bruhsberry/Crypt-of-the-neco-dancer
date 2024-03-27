@@ -592,7 +592,7 @@ void control() {
                     enemyUpd();
                 }
                 break;
-            /*case sf::Keyboard::Space :
+            case sf::Keyboard::Space :
                 if(!buttonPressed)
                     enemyUpd();
                 break;
@@ -602,7 +602,7 @@ void control() {
                     changeLevel();
                 }
                 break;
-            */
+            
             }
             if (!buttonPressed) {
                 lightUpdate();
