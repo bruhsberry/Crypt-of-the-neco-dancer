@@ -14,7 +14,8 @@ public:
 		player = Player(board.playerStartX, board.playerStartY);
 		nextLevel = board.nextLevel;
 		firstLevel = file;
-		difficulty = 0;
+		difficulty = 1;
+		board.difficulty = difficulty;
 		player.weapon->killing = false;
 		player.weapon->killingAnswer = false;
 	}

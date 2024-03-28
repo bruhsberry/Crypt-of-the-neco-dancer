@@ -8,8 +8,8 @@ using namespace std;
 #define WIN_HEIGHT game.board.height*CELL
 #define WIN_LENGTH game.board.length*CELL
 #define LIGHT_RAD 6
-bool started = false, changingLevelLock = false, changingLevelAnswer = false, gameOver = false;
-Game game("levels\\level1.txt");
+bool started = false, changingLevelLock = false, changingLevelAnswer = false, gameOver = false, closing = false;
+Game game("levels\\\\level1.txt");
 View mainView(FloatRect(0.f, 0.f, 10 * CELL, 10 * CELL));
 Event event;
 vector<vector<float>> light, lightTemp;
@@ -63,7 +63,7 @@ void loadTextures() {
 
 void render() {
     sf::Vector2f worldPos(0, 0);
-    RenderWindow window(VideoMode(800, 800), L"Crypt of the necodancer!", Style::Titlebar);
+    RenderWindow window(VideoMode(800, 800), L"Crypt of the necodancer!", Style::Close);
     window.setVerticalSyncEnabled(true);
     mainView.setCenter(game.player.x * CELL + CELL / 2, game.player.y * CELL + CELL / 2);
     //window.setView(mainView);
@@ -108,6 +108,7 @@ void render() {
             {
                 if (event.type == Event::Closed) {
                     window.close();
+                    closing = true;
                 }
             }
             start.loadFromFile("Sprites\\death.png");
@@ -121,8 +122,10 @@ void render() {
         {
             if (event.type == Event::Closed) {
                 window.close();
+                closing = true;
             }
         }
+        if (closing) break;
         window.clear(Color::Black);
         while (changingLevelLock) {
             changingLevelAnswer = true;
@@ -377,7 +380,6 @@ void render() {
         statsText.setString("hp: " + to_string(game.player.health) + "/" + to_string(game.player.maxhealth));
         window.draw(statsText);
 
-        changingLevelLock = false;
         window.display();
     }
 }
@@ -545,6 +547,7 @@ void control() {
     bool buttonPressed = false;
     while (true)
     {
+        if (closing) break;
         if (event.type == sf::Event::KeyPressed) {
 
             switch (event.key.code) {
@@ -646,4 +649,5 @@ int main()
     thread ctr(control);
     rend.join();
     ctr.join();
+    return 0;
 }
