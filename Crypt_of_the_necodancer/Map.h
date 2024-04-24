@@ -274,10 +274,12 @@ public:
 		killingAnswer = false;
 	}
 	short type() override { return itemTypes::weapon; };
+	virtual short weaponType() { return 0; };
 };
 
 class Sword :public Weapon {
 public:
+	short weaponType() override { return 1; }
 	bool attack(int dir, Map* board, int x, int y) override {
 		std::cout << "attack initiated\n";
 		switch (dir)
@@ -416,6 +418,7 @@ public:
 
 class NoWeapon : public Weapon {
 public:
+	short weaponType() override { return 0; }
 	bool attack(int dir, Map* board, int x, int y) override {
 		std::cout << "cant attack\n";
 		switch (dir)
@@ -469,6 +472,7 @@ public:
 
 class Broadsword :public Weapon {
 public:
+	short weaponType() override { return 2; }
 	bool attack(int dir, Map* board, int x, int y) override {
 		bool hit = false;
 		std::cout << "attack initiated\n";
@@ -635,6 +639,8 @@ public:
 };
 
 class Spear : public Weapon {
+public:
+	short weaponType() override { return 3; }
 	bool attack(int dir, Map* board, int x, int y) override {
 		bool hit = false;
 		std::cout << "attack initiated\n";

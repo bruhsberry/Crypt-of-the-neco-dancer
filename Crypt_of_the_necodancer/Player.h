@@ -14,6 +14,7 @@ public:
 	int health;
 	int maxhealth;
 	bool gameover;
+	int lastAttackDir;
 	void gameOver() {
 		gameover = true;
 	}
@@ -37,5 +38,6 @@ public:
 		armor = new NoArmor;
 		torch = new NoTorch;
 		gold = 0;
+		lastAttackDir = 0;
 	}
 };
