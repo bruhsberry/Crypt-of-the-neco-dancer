@@ -9,7 +9,8 @@ using namespace std;
 #define WIN_LENGTH game.board.length*CELL
 #define LIGHT_RAD 6
 bool started = false, changingLevelLock = false, changingLevelAnswer = false, gameOver = false, closing = false;
-Game game("levels\\\\level1.txt");
+int attackAnim = 4;
+Game game("levels\\\\bonuslevel.txt");
 View mainView(FloatRect(0.f, 0.f, 10 * CELL, 10 * CELL));
 Event event;
 vector<vector<float>> light, lightTemp;
@@ -22,7 +23,7 @@ enum tex { playerTex, wallTex, dirtTex, exitTex, greenSlimeTex, blueSlimeTex, re
     plateArmorTex, chestTex
 };
 #define TEXTURES_AMOUNT 30
-vector<Texture> textures, hearts;
+vector<Texture> textures, hearts, attackTex;
 void loadTextures() {
     textures.resize(TEXTURES_AMOUNT);
     textures[tex::playerTex].loadFromFile("Sprites\\neko.png");
@@ -58,11 +59,22 @@ void loadTextures() {
     hearts.resize(6);
     for (int i = 0; i < 6; i++)
         hearts[i].loadFromFile("Sprites\\hp\\" + to_string(i + 1) + "hp.png");
+    attackTex.resize(9);
+        attackTex[0].loadFromFile("Sprites\\attack anim\\sword0.png");
+        attackTex[1].loadFromFile("Sprites\\attack anim\\sword1.png");
+        attackTex[2].loadFromFile("Sprites\\attack anim\\sword2.png");
+        attackTex[3].loadFromFile("Sprites\\attack anim\\broadsword0.png");
+        attackTex[4].loadFromFile("Sprites\\attack anim\\broadsword1.png");
+        attackTex[5].loadFromFile("Sprites\\attack anim\\broadsword2.png");
+        attackTex[6].loadFromFile("Sprites\\attack anim\\spear0.png");
+        attackTex[7].loadFromFile("Sprites\\attack anim\\spear1.png");
+        attackTex[8].loadFromFile("Sprites\\attack anim\\spear2.png");
     
 }
 
 void render() {
-    sf::Vector2f worldPos(0, 0);
+    Vector2f worldPos(0, 0);
+    Clock clock;
     RenderWindow window(VideoMode(800, 800), L"Crypt of the necodancer!", Style::Close);
     window.setVerticalSyncEnabled(true);
     mainView.setCenter(game.player.x * CELL + CELL / 2, game.player.y * CELL + CELL / 2);
@@ -77,11 +89,12 @@ void render() {
     statsText.setFont(goldFont);
     statsText.setScale(0.6, 0.6);
 
-    Sprite sprite, shadow, playerSprite, enemySprite, startSprite, borderSprite, iconSprite;
+    Sprite sprite, shadow, playerSprite, enemySprite, startSprite, borderSprite, iconSprite, attackSprite;
     shadow.setTexture(textures[tex::shadow]);
     playerSprite.setTexture(textures[tex::playerTex]);
     playerSprite.setOrigin(CELL / 2, CELL / 2);
     enemySprite.setOrigin(CELL / 2, CELL / 2);
+ 
 
     Texture start, border;
     border.loadFromFile("Sprites\\border.png");
@@ -131,6 +144,7 @@ void render() {
             changingLevelAnswer = true;
             sleep(milliseconds(1));
         }
+
 
         for (int i = 0; i <game.board.length; i++)
         {
@@ -284,6 +298,61 @@ void render() {
         if (game.player.facingLeft) playerSprite.setScale(-1.f, 1.f);
         else playerSprite.setScale(1.f, 1.f);
         window.draw(playerSprite);
+
+
+        if (attackAnim<3) {
+            if (attackAnim == 0) {
+                clock.restart();
+                attackAnim++;
+            }
+            if (clock.getElapsedTime().asMilliseconds() > 80.0f) {
+                attackAnim++;
+                clock.restart();
+            }
+            
+            switch (game.player.weapon->weaponType())
+            {
+            case 1:
+                attackSprite.setTexture(attackTex[attackAnim - 1]);
+                attackSprite.setOrigin(CELL / 2, CELL / 2);
+                break;
+            case 2:
+                attackSprite.setTexture(attackTex[attackAnim + 2]);
+                attackSprite.setOrigin(CELL / 2 + CELL, CELL / 2);
+                break;
+            case 3:
+                attackSprite.setTexture(attackTex[attackAnim + 5]);
+                attackSprite.setOrigin(CELL / 2, CELL / 2 + CELL);
+                break;
+            default:
+                break;
+            }
+            switch (game.player.lastAttackDir)
+            {
+            case directions::left:
+                attackSprite.setPosition((game.player.x - 1) * CELL + CELL / 2, game.player.y * CELL + CELL / 2);
+                attackSprite.setRotation(-90);
+                break;
+            case directions::right:
+                attackSprite.setPosition((game.player.x + 1) * CELL + CELL / 2, game.player.y * CELL + CELL / 2);
+                attackSprite.setRotation(+90);
+                break;
+            case directions::up:
+                attackSprite.setPosition(game.player.x * CELL + CELL / 2, (game.player.y - 1) * CELL + CELL / 2);
+                attackSprite.setRotation(0);
+                break;
+            case directions::down:
+                attackSprite.setPosition(game.player.x * CELL + CELL / 2, (game.player.y + 1) * CELL + CELL / 2);
+                attackSprite.setRotation(180);
+                break;
+            default:
+                attackSprite.setPosition(game.player.x * CELL, game.player.y * CELL);
+                break;
+            }
+            
+            window.draw(attackSprite);
+        }
+
         //тени
         for (int i = 0; i < game.board.height; i++) {
             for (int j = 0; j < game.board.length; j++)
@@ -541,7 +610,14 @@ void changeLevel() {
 void checkExit() {
     if (game.board.m[game.player.x][game.player.y].tile == tile::exitDoor) changeLevel();
 }
-
+int attackCheck(int dir, Map* board, int x, int y) {
+    bool res = game.player.weapon->attack(dir, board, x, y);
+    if (res && game.player.weapon->name != "No weapon") {
+        attackAnim = 0;
+        game.player.lastAttackDir = dir;
+    }
+    return  res;
+}
 void control() {
     srand(time(NULL));
     bool buttonPressed = false;
@@ -554,7 +630,7 @@ void control() {
             case sf::Keyboard::Left:
                 if (game.player.x > 0 && game.board.m[max((int)game.player.x - 1, 0)][game.player.y].tile != tile::wall && !buttonPressed) {
                     game.player.facingLeft = true;
-                    if (!game.player.weapon->attack(directions::left, &game.board, game.player.x, game.player.y)) {
+                    if (!attackCheck(directions::left, &game.board, game.player.x, game.player.y)) {
                         smoothStep(directions::left);
                         checkItems();
                         checkExit();
@@ -566,7 +642,7 @@ void control() {
             case sf::Keyboard::Right:
                 if (game.player.x < game.board.length-1 && game.board.m[min((int)game.player.x + 1, game.board.length)][game.player.y].tile != tile::wall && !buttonPressed) {
                     game.player.facingLeft = false;
-                    if (!game.player.weapon->attack(directions::right, &game.board, game.player.x, game.player.y)) {
+                    if (!attackCheck(directions::right, &game.board, game.player.x, game.player.y)) {
                         smoothStep(directions::right);
                         checkItems();
                         checkExit();
@@ -577,7 +653,7 @@ void control() {
                 break;
             case sf::Keyboard::Up:
                 if (game.player.y > 0 && game.board.m[game.player.x][max((int)game.player.y - 1, 0)].tile != tile::wall && !buttonPressed) {
-                    if (!game.player.weapon->attack(directions::up, &game.board, game.player.x, game.player.y)) {
+                    if (!attackCheck(directions::up, &game.board, game.player.x, game.player.y)) {
                         smoothStep(directions::up);
                         checkItems();
                         checkExit();
@@ -587,7 +663,7 @@ void control() {
                 break;
             case sf::Keyboard::Down:
                 if (game.player.y < game.board.height-1 && game.board.m[game.player.x][min((int)game.player.y + 1, game.board.height)].tile != tile::wall && !buttonPressed) {
-                    if (!game.player.weapon->attack(directions::down, &game.board, game.player.x, game.player.y)) {
+                    if (!attackCheck(directions::down, &game.board, game.player.x, game.player.y)) {
                         smoothStep(directions::down);
                         checkItems();
                         checkExit();
