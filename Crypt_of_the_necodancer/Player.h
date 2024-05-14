@@ -35,8 +35,8 @@ public:
 		maxhealth = 5;
 		facingLeft = false;
 		weapon = new NoWeapon;
-		armor = new NoArmor;
-		torch = new NoTorch;
+		armor = nullptr;
+		torch = nullptr;
 		gold = 0;
 		lastAttackDir = 0;
 	}

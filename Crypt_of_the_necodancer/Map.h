@@ -245,12 +245,9 @@ public:
 	vector <vector<Cell>> m;
 	vector <Enemy*> e;
 	vector <Item*> it;
-	Map() {}
 	string nextLevel;
-	Map(string File);
-	void saveFile() {
-		
-	}
+	Map(string File, int difficulty);
+	Map() {}
 };
 
 
@@ -259,8 +256,8 @@ class Weapon : public Item
 public:
 	int damage;
 	bool killing, killingAnswer;
-	virtual bool attack(int dir, Map* board, int x, int y) { return 0; };
-	virtual string getName() { return name; };
+	virtual bool attack(int dir, Map* board, int x, int y) =0;
+	//virtual string getName() { return name; };
 	void dealDamage(int x, int y, Map* board) {
 		int index = board->m[x][y].enemy->eIndex;
 		killing = true;
@@ -275,7 +272,7 @@ public:
 	}
 	short type() override { return itemTypes::weapon; };
 	virtual short weaponType() { return 0; };
-};
+}; 
 
 class Sword :public Weapon {
 public:
@@ -317,134 +314,42 @@ public:
 		}
 		return 0;
 	}
-};
-
-class IronSword : public Sword {
-public:
-	short typeOf() override { return items::ironSword; };
-	IronSword() {
-		damage = 1;
-		name = "Iron sword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	IronSword(int x, int y, int i) {
+	Sword(int x, int y, int i, int p, int damage, std::string texrureFile) {
 		this->x = x;
 		this->y = y;
-		damage = 1;
+		this->damage = damage;
 		iIndex = i;
 		held = false;
-		name = "Iron sword";
-		price = 0;
-	}
-	IronSword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 1;
-		iIndex = i;
-		held = false;
-		name = "Iron sword";
 		price = p;
 		killing = false;
 		killingAnswer = false;
-	}
-};
-
-class TitaniumSword : public Sword {
-public:
-	short typeOf() override { return items::titaniumSword; };
-	
-	TitaniumSword() {
-		damage = 2;
-		name = "Titanium sword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	TitaniumSword(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium sword";
-		price = 0;
-	}
-	TitaniumSword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium sword";
-		price = p;
-		killing = false;
-		killingAnswer = false;
-	}
-};
-
-class GoldSword : public Sword {
-public:
-	short typeOf() override { return items::goldSword; };
-	GoldSword() {
-		damage = 1;
-		name = "Gold sword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	GoldSword(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold sword";
-		price = 0;
-	}
-	GoldSword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold sword";
-		price = p;
-		killing = false;
-		killingAnswer = false;
+		text.loadFromFile(texrureFile);
 	}
 };
 
 class NoWeapon : public Weapon {
 public:
-	short weaponType() override { return 0; }
+	//short typeOf() { return -2; };
+	short weaponType() override { return -1; }
 	bool attack(int dir, Map* board, int x, int y) override {
 		std::cout << "cant attack\n";
 		switch (dir)
 		{
 		case directions::right:
-			if (board->m[x + 1][y].enemy != nullptr) {
+			if (board->m[x + 1][y].enemy != nullptr)
 				return 1;
-			}
 			break;
-
 		case directions::left:
-			if (board->m[x - 1][y].enemy != nullptr) {
+			if (board->m[x - 1][y].enemy != nullptr) 
 				return 1;
-			}
 			break;
-
 		case directions::up:
-			if (board->m[x][y - 1].enemy != nullptr) {
+			if (board->m[x][y - 1].enemy != nullptr) 
 				return 1;
-			}
 			break;
-
 		case directions::down:
-			if (board->m[x][y + 1].enemy != nullptr) {
+			if (board->m[x][y + 1].enemy != nullptr) 
 				return 1;
-			}
 			break;
 
 		default:
@@ -454,17 +359,7 @@ public:
 	}
 	NoWeapon() {
 		held = true;
-		damage = 0;
-		name = "No weapon";		
-		killing = false;
-		killingAnswer = false;
-	}
-	NoWeapon(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 0;
-		iIndex = i;
-		name = "Test sword";
+		damage = 0;	
 		killing = false;
 		killingAnswer = false;
 	}
@@ -540,101 +435,16 @@ public:
 		if (hit) return 1;
 		return 0;
 	}
-};
-
-class IronBroadsword : public Broadsword {
-public:
-	short typeOf() override { return items::ironBroadsword; };
-	IronBroadsword() {
-		damage = 1;
-		name = "Iron broadsword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	IronBroadsword(int x, int y, int i) {
+	Broadsword(int x, int y, int i, int p, int damage, std::string texrureFile) {
 		this->x = x;
 		this->y = y;
-		damage = 1;
+		this->damage = damage;
 		iIndex = i;
 		held = false;
-		name = "Iron broadsword";
-		price = 0;
-	}
-	IronBroadsword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 1;
-		iIndex = i;
-		held = false;
-		name = "Iron broadsword";
 		price = p;
 		killing = false;
 		killingAnswer = false;
-	}
-};
-
-class TitaniumBroadsword : public Broadsword {
-public:
-	short typeOf() override { return items::titaniumBroadsword; };
-	TitaniumBroadsword() {
-		damage = 2;
-		name = "Titanium broadsword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	TitaniumBroadsword(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium broadsword";
-		price = 0;
-	}
-	TitaniumBroadsword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium broadsword";
-		price = p;
-		killing = false;
-		killingAnswer = false;
-	}
-};
-
-class GoldBroadsword : public Broadsword {
-public:
-	short typeOf() override { return items::goldBroadsword; };
-	GoldBroadsword() {
-		damage = 3;
-		name = "Gold broadsword";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	GoldBroadsword(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold broadsword";
-		price = 0;
-	}
-	GoldBroadsword(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold broadsword";
-		price = p;
-		killing = false;
-		killingAnswer = false;
+		text.loadFromFile(texrureFile);
 	}
 };
 
@@ -693,103 +503,50 @@ public:
 		if (hit) return 1;
 		return 0;
 	}
-};
-
-class IronSpear :public Spear {
-public:
-	short typeOf() override { return items::ironSpear; };
-	IronSpear() {
-		damage = 1;
-		name = "Iron spear";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	IronSpear(int x, int y, int i) {
+	Spear(int x, int y, int i, int p, int damage, std::string texrureFile) {
 		this->x = x;
 		this->y = y;
-		damage = 1;
+		this->damage = damage;
 		iIndex = i;
 		held = false;
-		name = "Iron spear";
-		price = 0;
-	}
-	IronSpear(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 1;
-		iIndex = i;
-		held = false;
-		name = "Iron spear";
 		price = p;
 		killing = false;
 		killingAnswer = false;
+		text.loadFromFile(texrureFile);
 	}
 };
 
-class TitaniumSpear :public Spear {
+class WeaponFactory {
 public:
-	short typeOf() override { return items::titaniumSpear; };
-	TitaniumSpear() {
-		damage = 2;
-		name = "Titanium spear";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
+	static Weapon* createIronSword(int x, int y, int i, int p) {
+		return new Sword(x, y, i, p, 1, "Sprites\\iron sword.png");
 	}
-	TitaniumSpear(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium spear";
-		price = 0;
+	static Weapon* createTitaniumSword(int x, int y, int i, int p) {
+		return new Sword(x, y, i, p, 2, "Sprites\\titanium sword.png");
 	}
-	TitaniumSpear(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 2;
-		iIndex = i;
-		held = false;
-		name = "Titanium spear";
-		price = p;
-		killing = false;
-		killingAnswer = false;
+	static Weapon* createGoldSword(int x, int y, int i, int p) {
+		return new Sword(x, y, i, p, 3, "Sprites\\gold sword.png");
+	}
+	static Weapon* createIronBroadsword(int x, int y, int i, int p) {
+		return new Broadsword(x, y, i, p, 1, "Sprites\\iron broadsword.png");
+	}
+	static Weapon* createTitaniumBroadsword(int x, int y, int i, int p) {
+		return new Broadsword(x, y, i, p, 2, "Sprites\\titanium broadsword.png");
+	}
+	static Weapon* createGoldBroadsword(int x, int y, int i, int p) {
+		return new Broadsword(x, y, i, p, 3, "Sprites\\gold broadsword.png");
+	}
+	static Weapon* createIronSpear(int x, int y, int i, int p) {
+		return new Spear(x, y, i, p, 1, "Sprites\\iron spear.png");
+	}
+	static Weapon* createTitaniumSpear(int x, int y, int i, int p) {
+		return new Spear(x, y, i, p, 2, "Sprites\\titanium spear.png");
+	}
+	static Weapon* createGoldSpear(int x, int y, int i, int p) {
+		return new Spear(x, y, i, p, 3, "Sprites\\gold spear.png");
 	}
 };
 
-class GoldSpear :public Spear {
-public:
-	short typeOf() override { return items::goldSpear; };
-	GoldSpear() {
-		damage = 3;
-		name = "Gold spear";
-		price = 0;
-		killing = false;
-		killingAnswer = false;
-	}
-	GoldSpear(int x, int y, int i) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold spear";
-		price = 0;
-	}
-	GoldSpear(int x, int y, int i, int p) {
-		this->x = x;
-		this->y = y;
-		damage = 3;
-		iIndex = i;
-		held = false;
-		name = "Gold spear";
-		price = p;
-		killing = false;
-		killingAnswer = false;
-	}
-};
 
 void Enemy::die(Map* board){
 	cout << "umer\n";
@@ -1161,6 +918,7 @@ void Chest::die(Map* board) {
 	board->m[x][y].item = itCarry;
 	board->it.push_back(itCarry);
 }
+
 Chest::Chest(int x, int y, int index, int itemId) {
 	health = 1;
 	eIndex = index;
@@ -1169,49 +927,49 @@ Chest::Chest(int x, int y, int index, int itemId) {
 	switch (itemId)
 	{
 	case items::ironSword:
-		itCarry = new IronSword();
+		itCarry = WeaponFactory::createIronSword(x, y, 0, 0);
 		break;
 	case items::titaniumSword:
-		itCarry = new TitaniumSword();
+		itCarry = WeaponFactory::createTitaniumSword(x, y, 0, 0);
 		break;
 	case items::goldSword:
-		itCarry = new GoldSword();
+		itCarry = WeaponFactory::createGoldSword(x, y, 0, 0);
 		break;
 	case items::woodenTorch:
-		itCarry = new WoodenTorch();
+		itCarry = TorchFactory::createWoodenTorch(x, y, 0, 0);
 		break;
 	case items::steelTorch:
-		itCarry = new SteelTorch();
+		itCarry = TorchFactory::createSteelTorch(x, y, 0, 0);
 		break;
 	case items::magicTorch:
-		itCarry = new MagicTorch();
+		itCarry = TorchFactory::createMagicTorch(x, y, 0, 0);
 		break;
 	case items::ironBroadsword:
-		itCarry = new IronBroadsword();
+		itCarry = WeaponFactory::createIronBroadsword(x, y, 0, 0);
 		break;
 	case items::titaniumBroadsword:
-		itCarry = new TitaniumBroadsword();
+		itCarry = WeaponFactory::createTitaniumBroadsword(x, y, 0, 0);
 		break;
 	case items::goldBroadsword:
-		itCarry = new GoldBroadsword();
+		itCarry = WeaponFactory::createGoldBroadsword(x, y, 0, 0);
 		break;
 	case items::ironSpear:
-		itCarry = new IronSpear();
+		itCarry = WeaponFactory::createIronSpear(x, y, 0, 0);
 		break;
 	case items::titaniumSpear:
-		itCarry = new TitaniumSpear();
+		itCarry = WeaponFactory::createTitaniumSpear(x, y, 0, 0);
 		break;
 	case items::goldSpear:
-		itCarry = new GoldSpear();
+		itCarry = WeaponFactory::createGoldSpear(x, y, 0, 0);
 		break;
 	case items::letherArmor:
-		itCarry = new LetherArmor();
+		itCarry = ArmorFactory::createLetherArmor(x, y, 0, 0);
 		break;
 	case items::chainArmor:
-		itCarry = new ChainArmor();
+		itCarry = ArmorFactory::createChainArmor(x, y, 0, 0);
 		break;
 	case items::plateArmor:
-		itCarry = new PlateArmor();
+		itCarry = ArmorFactory::createPlateArmor(x, y, 0, 0);
 		break;
 	default:
 		break;
@@ -1219,8 +977,8 @@ Chest::Chest(int x, int y, int index, int itemId) {
 }
 
 
-Map::Map(string File) {
-	difficulty = 0;
+Map::Map(string File, int difficulty) {
+	this->difficulty = difficulty;
 	ifstream f(File);
 	if (!f.is_open()) cout << "file is not open";
 	f >> playerStartX >> playerStartY;
@@ -1282,49 +1040,49 @@ Map::Map(string File) {
 		switch (type)
 		{
 		case items::ironSword: 
-			m[x][y].item = new IronSword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createIronSword(x, y, i, price);
 			break;
 		case items::titaniumSword: 
-			m[x][y].item = new TitaniumSword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createTitaniumSword(x, y, i, price);
 			break;	
 		case items::goldSword:
-			m[x][y].item = new GoldSword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createGoldSword(x, y, i, price);
 			break;
 		case items::woodenTorch:
-			m[x][y].item = new WoodenTorch(x, y, i, price);
+			m[x][y].item = TorchFactory::createWoodenTorch(x, y, i, price);
 			break;
 		case items::steelTorch:
-			m[x][y].item = new SteelTorch(x, y, i, price);
+			m[x][y].item = TorchFactory::createSteelTorch(x, y, i, price);
 			break;
 		case items::magicTorch:
-			m[x][y].item = new MagicTorch(x, y, i, price);
+			m[x][y].item = TorchFactory::createMagicTorch(x, y, i, price);
 			break;
 		case items::ironBroadsword:
-			m[x][y].item = new IronBroadsword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createIronBroadsword(x, y, i, price);
 			break;
 		case items::titaniumBroadsword:
-			m[x][y].item = new TitaniumBroadsword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createTitaniumBroadsword(x, y, i, price);
 			break;
 		case items::goldBroadsword:
-			m[x][y].item = new GoldBroadsword(x, y, i, price);
+			m[x][y].item = WeaponFactory::createGoldBroadsword(x, y, i, price);
 			break;
 		case items::ironSpear:
-			m[x][y].item = new IronSpear(x, y, i, price);
+			m[x][y].item = WeaponFactory::createIronSpear(x, y, i, price);
 			break;
 		case items::titaniumSpear:
-			m[x][y].item = new TitaniumSpear(x, y, i, price);
+			m[x][y].item = WeaponFactory::createTitaniumSpear(x, y, i, price);
 			break;
 		case items::goldSpear:
-			m[x][y].item = new GoldSpear(x, y, i, price);
+			m[x][y].item = WeaponFactory::createGoldSpear(x, y, i, price);
 			break;
 		case items::letherArmor:
-			m[x][y].item = new LetherArmor(x, y, i, price);
+			m[x][y].item = ArmorFactory::createLetherArmor(x, y, i, price);
 			break;
 		case items::chainArmor:
-			m[x][y].item = new ChainArmor(x, y, i, price);
+			m[x][y].item = ArmorFactory::createChainArmor(x, y, i, price);
 			break;
 		case items::plateArmor:
-			m[x][y].item = new PlateArmor(x, y, i, price);
+			m[x][y].item = ArmorFactory::createPlateArmor(x, y, i, price);
 			break;
 		default:
 			break;

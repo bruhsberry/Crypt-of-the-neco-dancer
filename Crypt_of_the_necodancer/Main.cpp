@@ -38,23 +38,7 @@ void loadTextures() {
     textures[tex::skeletonTex].loadFromFile("Sprites\\skeleton.png");
     textures[tex::zombieTex].loadFromFile("Sprites\\zombie.png");
     textures[tex::goldTex].loadFromFile("Sprites\\gold.png");
-    textures[tex::ironSwordTex].loadFromFile("Sprites\\iron sword.png");
-    textures[tex::ironBroadswordTex].loadFromFile("Sprites\\iron broadsword.png");
-    textures[tex::goldSwordTex].loadFromFile("Sprites\\gold sword.png");
-    textures[tex::goldBroadswordTex].loadFromFile("Sprites\\gold broadsword.png");
-    textures[tex::titaniumSwordTex].loadFromFile("Sprites\\titanium sword.png");
-    textures[tex::titaniumBroadswordTex].loadFromFile("Sprites\\titanium broadsword.png");
-    textures[tex::notexture].loadFromFile("Sprites\\aaaa.png");
     textures[tex::shadow].loadFromFile("Sprites\\shadow.png");
-    textures[tex::woodenTorchTex].loadFromFile("Sprites\\wooden torch.png");
-    textures[tex::steelTorchTex].loadFromFile("Sprites\\steel torch.png");
-    textures[tex::magicTorchTex].loadFromFile("Sprites\\magic torch.png");
-    textures[tex::ironSpearTex].loadFromFile("Sprites\\iron spear.png");
-    textures[tex::titaniumSpearTex].loadFromFile("Sprites\\titanium spear.png");
-    textures[tex::goldSpearTex].loadFromFile("Sprites\\gold spear.png");
-    textures[tex::letherArmorTex].loadFromFile("Sprites\\lether.png");
-    textures[tex::chainArmorTex].loadFromFile("Sprites\\chainmail.png");
-    textures[tex::plateArmorTex].loadFromFile("Sprites\\plate.png");
     textures[tex::chestTex].loadFromFile("Sprites\\chest.png");
     hearts.resize(6);
     for (int i = 0; i < 6; i++)
@@ -177,59 +161,9 @@ void render() {
         {
             if (game.board.it[i] == nullptr) continue;
             if (game.board.it[i]->held) continue;
-            switch (game.board.it[i]->typeOf()) {
-            case items::letherArmor:
-                sprite.setTexture(textures[tex::letherArmorTex]);
-                break;
-            case items::chainArmor:
-                sprite.setTexture(textures[tex::chainArmorTex]);
-                break;
-            case items::plateArmor:
-                sprite.setTexture(textures[tex::plateArmorTex]);
-                break;
-            case items::ironSword:
-                sprite.setTexture(textures[tex::ironSwordTex]);
-                break;
-            case items::titaniumSword:
-                sprite.setTexture(textures[tex::titaniumSwordTex]);
-                break;
-            case items::goldSword:
-                sprite.setTexture(textures[tex::goldSwordTex]);
-                break;
-            case items::ironBroadsword:
-                sprite.setTexture(textures[tex::ironBroadswordTex]);
-                break;
-            case items::titaniumBroadsword:
-                sprite.setTexture(textures[tex::titaniumBroadswordTex]);
-                break;
-            case items::goldBroadsword:
-                sprite.setTexture(textures[tex::goldBroadswordTex]);
-                break;
-            case items::ironSpear:
-                sprite.setTexture(textures[tex::ironSpearTex]);
-                break;
-            case items::titaniumSpear:
-                sprite.setTexture(textures[tex::titaniumSpearTex]);
-                break;
-            case items::goldSpear:
-                sprite.setTexture(textures[tex::goldSpearTex]);
-                break;
-            case items::magicTorch:
-                sprite.setTexture(textures[tex::magicTorchTex]);
-                break;
-            case items::steelTorch:
-                sprite.setTexture(textures[tex::steelTorchTex]);
-                break;
-            case items::woodenTorch:
-                sprite.setTexture(textures[tex::woodenTorchTex]);
-                break;
-            default:
-                sprite.setTexture(textures[tex::notexture]);
-                break;
-
-            }
             sprite.setPosition(game.board.it[i]->x * CELL, game.board.it[i]->y * CELL);
-            window.draw(sprite);
+            window.draw(game.board.it[i]->loadSprite());
+
             if (game.board.it[i]->price > 0) {
                 priceText.setString(to_string(game.board.it[i]->price)+"$");
                 priceText.setPosition(game.board.it[i]->x * CELL + CELL/2, game.board.it[i]->y * CELL + 45);
@@ -365,83 +299,27 @@ void render() {
 
         
         borderSprite.setPosition(game.player.x * CELL - 250, game.player.y * CELL - 210);
+        window.draw(borderSprite);
+        iconSprite = game.player.weapon->loadIcon();
         iconSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 210);
-        switch (game.player.weapon->typeOf())
-        {
-        case items::ironSword:
-            iconSprite.setTexture(textures[tex::ironSwordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::titaniumSword:
-            iconSprite.setTexture(textures[tex::titaniumSwordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::goldSword:
-            iconSprite.setTexture(textures[tex::goldSwordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::ironBroadsword:
-            iconSprite.setTexture(textures[tex::ironBroadswordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::titaniumBroadsword:
-            iconSprite.setTexture(textures[tex::titaniumBroadswordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::goldBroadsword:
-            iconSprite.setTexture(textures[tex::goldBroadswordTex]);
-            window.draw(iconSprite);
-            break;
-        case items::ironSpear:
-            iconSprite.setTexture(textures[tex::ironSpearTex]);
-            window.draw(iconSprite);
-            break;
-        case items::titaniumSpear:
-            iconSprite.setTexture(textures[tex::titaniumSpearTex]);
-            window.draw(iconSprite);
-            break;
-        case items::goldSpear:
-            iconSprite.setTexture(textures[tex::goldSpearTex]);
-            window.draw(iconSprite);
-            break;
-        default:
-            break;
-        }
-        window.draw(borderSprite);
+        window.draw(iconSprite);
+
         borderSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 150);
-        iconSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 150);
-        switch (game.player.armor->typeOf()) {
-        case items::letherArmor:
-            iconSprite.setTexture(textures[tex::letherArmorTex]);
-            window.draw(iconSprite);
-            break;
-        case items::chainArmor:
-            iconSprite.setTexture(textures[tex::chainArmorTex]);
-            window.draw(iconSprite);
-            break;
-        case items::plateArmor:
-            iconSprite.setTexture(textures[tex::plateArmorTex]);
-            window.draw(iconSprite);
-            break;
-        }
         window.draw(borderSprite);
+        if (game.player.armor != nullptr) {
+            iconSprite = game.player.armor->loadIcon();
+            iconSprite.setPosition(game.player.x * CELL - 250, game.player.y * CELL - 150);
+            window.draw(iconSprite);
+        }
+
         borderSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 90);
-        iconSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 90);
         window.draw(borderSprite);
-        switch (game.player.torch->typeOf()) {
-        case items::magicTorch:
-            iconSprite.setTexture(textures[tex::magicTorchTex]);
+        if (game.player.torch != nullptr) {
+            iconSprite = game.player.torch->loadIcon();
+            iconSprite.setPosition(game.player.x* CELL - 250, game.player.y* CELL - 90);
             window.draw(iconSprite);
-            break;
-        case items::steelTorch:
-            iconSprite.setTexture(textures[tex::steelTorchTex]);
-            window.draw(iconSprite);
-            break;
-        case items::woodenTorch:
-            iconSprite.setTexture(textures[tex::woodenTorchTex]);
-            window.draw(iconSprite);
-            break;
         }
+
         statsText.setPosition(game.player.x* CELL - 270, game.player.y* CELL - 280);
         statsText.setString("gold: " + to_string(game.player.gold));
         window.draw(statsText);
@@ -525,7 +403,7 @@ void checkItems() {
             switch (game.board.m[game.player.x][game.player.y].item->type())
             {
             case weapon:
-                if (game.player.weapon->name == "No weapon") {
+                if (game.player.weapon->weaponType() == -1) {
                     delete(game.player.weapon);
                     game.player.weapon = nullptr;
                 }
@@ -534,19 +412,11 @@ void checkItems() {
                 game.board.m[game.player.x][game.player.y].item = tempw;
                 break;
             case armor:
-                if (game.player.armor->name == "No armor") {
-                    delete(game.player.armor);
-                    game.player.armor = nullptr;
-                }
                 tempa = game.player.armor;
                 game.player.armor = dynamic_cast <Armor*> (game.board.m[game.player.x][game.player.y].item);
                 game.board.m[game.player.x][game.player.y].item = tempa;
                 break;
             case torch:
-                if (game.player.torch->name == "No torch") {
-                    delete(game.player.torch);
-                    game.player.torch = nullptr;
-                }
                 tempt = game.player.torch;
                 game.player.torch = dynamic_cast <Torch*> (game.board.m[game.player.x][game.player.y].item);
                 game.board.m[game.player.x][game.player.y].item = tempt;
@@ -586,14 +456,16 @@ void lightRec(int x, int y, int value) {
 }
 
 void lightUpdate() {
+    short brightness = 3;
+    if (game.player.torch != nullptr) brightness = game.player.torch->power;
     lightTemp.clear();
     lightTemp.resize(game.board.length);
     for (int i = 0; i < game.board.length; i++)
         lightTemp[i].resize(game.board.height);
-    lightRec(game.player.x, game.player.y, game.player.torch->power);
+    lightRec(game.player.x, game.player.y, brightness);
     for (int i = 0; i < game.board.height; i++)
         for (int j = 0; j < game.board.length; j++)
-            lightTemp[j][i] /= game.player.torch->power;
+            lightTemp[j][i] /= brightness;
     light = lightTemp;
 }
 
@@ -612,7 +484,7 @@ void checkExit() {
 }
 int attackCheck(int dir, Map* board, int x, int y) {
     bool res = game.player.weapon->attack(dir, board, x, y);
-    if (res && game.player.weapon->name != "No weapon") {
+    if (res && game.player.weapon->weaponType() != -1) {
         attackAnim = 0;
         game.player.lastAttackDir = dir;
     }
